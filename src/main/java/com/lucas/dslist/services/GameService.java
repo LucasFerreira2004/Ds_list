@@ -1,10 +1,12 @@
 package com.lucas.dslist.services;
 
+import com.lucas.dslist.dto.GameDTO;
 import com.lucas.dslist.dto.GameMinDTO;
 import com.lucas.dslist.entities.Game;
 import com.lucas.dslist.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,5 +19,10 @@ public class GameService {
         List<Game> result = gameRepository.findAll();
         List<GameMinDTO> dto = result.stream().map(x -> new GameMinDTO(x)).toList();
         return dto;
+    }
+    @Transactional(readOnly = true)
+    public GameDTO findById(Long id){
+        Game game = gameRepository.findById(id).get(); //podem ser feitos tratamentos de exeção para id null
+        return new GameDTO(game);
     }
 }
